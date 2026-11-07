@@ -6,5 +6,5 @@
 
 Core.lua
 MacroManagement.lua
-MacroList.lua
+Templates.lua
 Window.lua
