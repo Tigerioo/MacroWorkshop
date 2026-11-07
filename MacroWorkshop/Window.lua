@@ -100,6 +100,10 @@ local function createWindow()
     close:SetScript("OnClick", function() f:Hide() end)
 
     label(f, "技能", 18, 55, "GameFontNormal")
+    button(f, "管理已有宏", 363, 51, 123, function()
+        f:Hide()
+        addon.OpenMacroManager()
+    end)
     local slot = CreateFrame("Button", nil, f)
     slot:SetPoint("TOPLEFT", 20, -78)
     slot:SetSize(40, 40)
@@ -114,6 +118,12 @@ local function createWindow()
     slot:SetScript("OnClick", receiveSpell)
     label(f, "拖入技能，或输入技能名称 / ID 后按回车", 76, 62, "GameFontHighlightSmall")
     f.spell = field(f, 80, 84, 245)
+    button(f, "写入已有宏", 344, 83, 142, function()
+        local body, err = addon.BuildMacro(f.spell:GetText(), f.mode, f.fallback:GetChecked())
+        if not body then f.status:SetText(err); return end
+        f:Hide()
+        addon.OpenMacroManager(body)
+    end)
     f.spell:SetScript("OnTextChanged", function(_, userInput)
         if userInput then f.icon:SetTexture(134400); refresh() end
     end)
@@ -202,11 +212,16 @@ end
 
 SLASH_MACROWORKSHOP1 = "/mw"
 SLASH_MACROWORKSHOP2 = "/macroworkshop"
-SlashCmdList.MACROWORKSHOP = function()
+function addon.OpenMacroBuilder()
     if InCombatLockdown() then
         print("宏工坊：请脱战后打开。")
         return
     end
     if not frame then createWindow() end
-    if frame:IsShown() then frame:Hide() else frame:Show(); refresh() end
+    frame:Show()
+    refresh()
+end
+
+SlashCmdList.MACROWORKSHOP = function()
+    if frame and frame:IsShown() then frame:Hide() else addon.OpenMacroBuilder() end
 end
