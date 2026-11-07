@@ -2,7 +2,7 @@
 ## Title: MacroWorkshop |cffaaaaaa宏工坊|r
 ## Notes: 根据技能快速创建游戏内宏。
 ## Author: Tigerio
-## Version: 0.1.0
+## Version: 0.2.0
 
 Core.lua
 MacroManagement.lua
